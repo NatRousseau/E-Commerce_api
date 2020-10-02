@@ -15,7 +15,8 @@
         <p class="card-text">{{ product.mark }}, {{ product.model }}</p>
         <p class="card-text">{{ product.description | nl2br }}</p>
         <div class="text-primary" style="font-size: 2rem; font-weight: bold;">
-            {{ product.price }} €
+            {{ product.formattedPrice }} €
         </div>
+        <a href="{{ path('cart_add', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
     </div>
 </div>

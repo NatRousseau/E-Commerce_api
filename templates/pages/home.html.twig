@@ -16,12 +16,20 @@
             {% for product in products %}
                 <div class="col-3">
                     <div class="card">
+                        {% if product.filename %}
+                            <img src="{{ vich_uploader_asset(product, 'imageFile') }}" alt="" class="card-img-top"
+                                 style="width: 100%; height: auto;">
+                        {% else %}
+                            <img src="{{ '/images/products/empty.jpg' }}" alt="" class="card-img-top"
+                                 style="width: 100%; height: auto;">
+                        {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a href="{{ path('property.show', {id: product.id, slug: product.slug}) }}">{{ product.title }}</a>
                             </h5>
                             <p class="card-text">{{ product.mark }} {{ product.model }}</p>
                             <div class="text-primary" style="font-weight:bold;font-size: 2rem;">{{ product.formattedPrice }}€</div>
+                            <a href="{{ path('cart_add', {'id': product.id}) }}" class="btn btn-primary">Ajouter au panier</a>
                         </div>
                     </div>
                 </div>

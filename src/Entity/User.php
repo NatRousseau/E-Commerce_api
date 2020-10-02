@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -25,8 +26,15 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire minimum 8 caractères")
      */
     private $password;
+
+    /**
+     * @Assert\EqualTo(propertyPath="password", message="Votre mot de passe doit être le même")
+     */
+
+    public $confirm_password;
 
     public function getId(): ?int
     {
@@ -57,9 +65,10 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+
     public function getRoles()
     {
-        return ['ROLE_ADMIN'];
+        return ['ROLE_USER'];
     }
 
     public function getSalt()
