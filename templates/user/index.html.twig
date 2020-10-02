@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Mon Profil' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Mon Profil</h1>
+        {% for message in app.flashes('message')  %}
+            <div class="div alert alert-success"> {{ message }}</div>
+        {% endfor %}
+        <h2>Information générales</h2>
+        <div>
+            <div class="col-md-4">Pseudo : {{ app.user.username }}</div>
+            <div class="col-md-4">Nom : {{ app.user.lastname }}</div>
+            <div class="col-md-4">Prenom : {{ app.user.firstname }}</div>
+        </div>
+        <h2>Adresse de facturation</h2>
+        <div>
+            <div class="col-md-4">Adresse : {{ app.user.billingAdress }}</div>
+            <div class="col-md-4">Ville : {{ app.user.billingCity }}</div>
+            <div class="col-md-4">Code postal : {{ app.user.billingPostalCode }}</div>
+        </div>
+        <h2>Adresse de livraison</h2>
+        <div>
+            <div class="col-md-4">Adresse : {{ app.user.shippingAdress }}</div>
+            <div class="col-md-4">Ville : {{ app.user.shippingCity }}</div>
+            <div class="col-md-4">Code postal : {{ app.user.shippingPostalCode }}</div>
+        </div>
+        <a href="{{ path('profil.edit') }}" class="btn btn-primary mt-4">Modifier le profil</a>
+
+    </div>
+{% endblock %}
