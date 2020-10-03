@@ -4,7 +4,10 @@
 
 {% block body %}
     <div class="container mt-4">
-        <h1>Mon Profil</h1>
+        <div class="jumbotron mb-4">
+            <h1>Mon Profil</h1>
+        </div>
+
         {% for message in app.flashes('message')  %}
             <div class="div alert alert-success"> {{ message }}</div>
         {% endfor %}

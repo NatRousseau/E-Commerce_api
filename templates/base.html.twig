@@ -30,6 +30,9 @@
         {% if app.user %}
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a href="{{ path('profil.index') }}" class="nav-link">Mon compte</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('logout') }}" class="nav-link">Se déconnecter</a>
                 </li>
             </ul>
