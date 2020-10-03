@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Orders;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,7 +14,7 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('user_id')
-            ->add('products')
+            ->add('products',HiddenType::class)
             ->add('billing_adress')
             ->add('billing_city')
             ->add('billing_postal_code')

@@ -40,22 +40,34 @@ class OrderController extends AbstractController
     {
         $user = $this->getUser();
         $order = new Orders();
-        $form = $this->createForm(EditProfileType::class, $user);
-        $orderform = $this->createForm(OrderType::class, $order);
-        $orderform->handleRequest($request);
 
-        if ($orderform->isSubmitted() && $orderform->isValid()) {
+        $order->setUserId($user->getId());
+        $order->setProducts($cartService->getFullCart());
+        $order->setBillingAdress($user->getBillingAdress());
+        $order->setBillingCity($user->getBillingCity());
+        $order->setBillingPostalCode($user->getBillingPostalCode());
+        $order->setShippingAdress($user->getShippingAdress());
+        $order->setShippingCity($user->getShippingCity());
+        $order->setShippingPostalCode($user->getShippingPostalCode());
+        $order->setPaiementStatus('En cours de paiement');
+
+//        $form = $this->createForm(EditProfileType::class, $user);
+
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
             $this->em->persist($order);
             $this->em->flush();
-            $this->addFlash('success', 'La commande à été créé avec succés');
-            return $this->redirectToRoute('profil.index');
+            return new Response('voila');
+//            $this->addFlash('success', 'La commande à été créé avec succés');
+//            return $this->redirectToRoute('profil.index');
         }
 
         return $this->render('order/index.html.twig', [
             'items' => $cartService->getFullCart(),
             'total' => $cartService->getTotal(),
-            'form' => $form->createView(),
-            'orderForm' => $orderform->createView()
+            'form' => $form->createView()
         ]);
     }
 }

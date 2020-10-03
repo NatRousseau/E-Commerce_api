@@ -10,8 +10,13 @@
         <div class="d-flex flex-row recap">
             <div class="d-flex flex-column recap_user" style="margin-right: 100px;">
                 <h1>Information de livraison</h1>
-                {{ form_start(orderForm) }}
-                <div class="col-md-4">{{ form_row(orderForm.billing_adress) }}</div>
+                {{ form_start(form) }}
+                <div>{{ form_row(form.billing_adress) }}</div>
+                <div>{{ form_row(form.billing_city) }}</div>
+                <div>{{ form_row(form.billing_postal_code) }}</div>
+                <div>{{ form_row(form.shipping_adress) }}</div>
+                <div>{{ form_row(form.shipping_city) }}</div>
+                <div>{{ form_row(form.shipping_postal_code) }}</div>
                 {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>
@@ -34,7 +39,8 @@
                             <td>{{ item.quantity }}</td>
                             <td>{{ item.product.price * item.quantity }} €</td>
                             <td>
-                                <a href="{{ path('cart_remove', {'id': item.product.id}) }}" class="btn btn-danger btn-sm">X</a>
+                                <a href="{{ path('cart_remove', {'id': item.product.id}) }}"
+                                   class="btn btn-danger btn-sm">X</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -47,7 +53,7 @@
                     </tr>
                     </tfoot>
                 </table>
-                <button class="btn btn-primary">{{ button|default('Valider') }}</button>
+                <button class="btn btn-primary" type="submit">Valider</button>
             </div>
         </div>
     </div>

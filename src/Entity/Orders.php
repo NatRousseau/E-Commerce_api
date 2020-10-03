@@ -79,7 +79,7 @@ class Orders
         return $this;
     }
 
-    public function getProducts(): ?array
+    public function getProducts(): array
     {
         return $this->products;
     }
