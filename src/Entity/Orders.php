@@ -23,11 +23,6 @@ class Orders
     private $user_id;
 
     /**
-     * @ORM\Column(type="array")
-     */
-    private $products = [];
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $billing_adress;
@@ -75,18 +70,6 @@ class Orders
     public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    public function getProducts(): array
-    {
-        return $this->products;
-    }
-
-    public function setProducts(array $products): self
-    {
-        $this->products = $products;
 
         return $this;
     }

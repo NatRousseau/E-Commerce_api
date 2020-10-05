@@ -8,6 +8,9 @@
             <h1>Mon Profil</h1>
         </div>
 
+        {% for message in app.flashes('success')  %}
+            <div class="div alert alert-success"> {{ message }}</div>
+        {% endfor %}
         {% for message in app.flashes('message')  %}
             <div class="div alert alert-success"> {{ message }}</div>
         {% endfor %}
