@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrdersRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -60,6 +61,11 @@ class Orders
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSlug(): string
+    {
+        return (new Slugify())->slugify($this->id);
     }
 
     public function getUserId(): ?int

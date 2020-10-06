@@ -4,12 +4,17 @@ namespace App\Controller;
 
 use App\Entity\OrderProduct;
 use App\Entity\Orders;
+use App\Entity\Product;
 use App\Form\EditProfileType;
 use App\Form\OrderType;
+use App\Repository\OrderProductRepository;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductRepository;
 use App\Service\Cart\CartService;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use phpDocumentor\Reflection\Types\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,13 +40,18 @@ class OrderController extends AbstractController
      * @var SessionInterface
      */
     private $session;
+    /**
+     * @var OrderProductRepository
+     */
+    private $orderProductRepository;
 
-    public function __construct(OrdersRepository $repository, EntityManagerInterface $em, SessionInterface $session, ProductRepository $productRepository)
+    public function __construct(OrdersRepository $repository, EntityManagerInterface $em, SessionInterface $session, ProductRepository $productRepository, OrderProductRepository $orderProductRepository)
     {
         $this->repository = $repository;
         $this->em = $em;
         $this->session = $session;
         $this->productRepository = $productRepository;
+        $this->orderProductRepository = $orderProductRepository;
     }
 
 
@@ -88,6 +98,117 @@ class OrderController extends AbstractController
             'items' => $cartService->getFullCart(),
             'total' => $cartService->getTotal(),
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/profil/commandes", name="order.view")
+     * @return Response
+     */
+    public function view()
+    {
+        $user = $this->getUser();
+
+        $orders = $this->repository->findByUser($user);
+//        foreach ($orders as $id => $orderId) {
+//            $test = null;
+//
+//            $orderid = $orders[$id]->getId();
+
+        return $this->render('user/view.html.twig', [
+            'orders' => $orders,
+//                'tests' => $test
+        ]);
+
+
+//        }
+    }
+
+
+    /**
+     * @Route("/profil/commandes/detail{slug}-{id}", name="order.detail")
+     * @param Orders $orders
+     * @param int $slug
+     * @return Response
+     */
+    public function show(Orders $orders, int $slug): Response
+    {
+        if ($orders->getId() !== $slug) {
+            return $this->redirectToRoute('order.detail', [
+                'id' => $orders->getId(),
+                'slug' => $orders->getSlug()
+            ]);
+        }
+
+        $orderid = $orders->getId();
+        $order_products = $this->orderProductRepository->findByOrder($orderid);
+        $productsList = [];
+
+        foreach ($order_products as $key => $value) {
+            $productId = $order_products[$key]->getProductId();
+            $productsList[] = $this->productRepository->find($productId);
+        }
+
+        return $this->render('user/detail.html.twig', [
+            'order' => $orders,
+            'orderProducts' => $order_products,
+            'products' => $productsList,
+            'current_menu' => 'properties'
+        ]);
+    }
+
+    /**
+     * @Route("/profil/commandes/detail/pdf-{id}", name="order.pdf")
+     * @param Orders $orders
+//     * @param int $slug
+     * @return Response
+     */
+    public function pdf(Orders $orders) : Response
+    {
+        $orderid = $orders->getId();
+        $order_products = $this->orderProductRepository->findByOrder($orderid);
+        $productsList = [];
+
+        foreach ($order_products as $key => $value) {
+            $productId = $order_products[$key]->getProductId();
+            $productsList[] = $this->productRepository->find($productId);
+        }
+
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('user/mypdf.html.twig', [
+            'title' => "Welcome to our PDF Test",
+            'order' => $orders,
+            'orderProducts' => $order_products,
+            'products' => $productsList,
+            'current_menu' => 'properties'
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("facture.pdf", [
+            "Attachment" => true
+        ]);
+
+        return $this->render('user/detail.html.twig', [
+            'order' => $orders,
+            'orderProducts' => $order_products,
+            'products' => $productsList,
+            'current_menu' => 'properties'
         ]);
     }
 }

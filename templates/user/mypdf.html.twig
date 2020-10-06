@@ -1,0 +1,53 @@
+{% block body %}
+    <div>
+        <div>
+            <h1>Commande N°{{ order.id }}</h1>
+        </div>
+    </div>
+    <div>
+        <div>
+            <div>
+                <h2>Adresse de facturation</h2>
+                <h4>{{ order.billingAdress }}</h4>
+                <h4>{{ order.billingPostalCode }}, {{ order.billingCity }}</h4>
+            </div>
+            <div>
+                <h2>Adresse de livraison</h2>
+                <h4>{{ order.shippingAdress }}</h4>
+                <h4>{{ order.shippingPostalCode }}, {{ order.shippingCity }}</h4>
+                <h4></h4>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2>Produits commandés :</h2>
+        <table>
+            <thead>
+            <tr>
+                <th><h4>Produits</h4></th>
+                <th><h4>Quantité</h4></th>
+                <th><h4>Prix</h4></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    {% for product in products %}
+                        <h5>{{ product.title }}</h5>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for orderProduct in orderProducts %}
+                        <h5>{{ orderProduct.productQuantity }}</h5>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for product in products %}
+                        <h5>{{ product.price }}</h5>
+                    {% endfor %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Mes Commandes' %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="jumbotron mb-4">
+            <h1>Mes Commandes</h1>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="div alert alert-success"> {{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('message') %}
+            <div class="div alert alert-success"> {{ message }}</div>
+        {% endfor %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Commandes N°</th>
+                <th>Adresse de Livraison</th>
+                <th>Adresse de Facturation</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>
+                        <div>
+                            {{ order.shippingAdress }}, {{ order.shippingCity }} {{ order.shippingPostalCode }}
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            {{ order.billingAdress }}, {{ order.billingCity }} {{ order.billingPostalCode }}
+                        </div>
+                    </td>
+                    <td>{{ order.paiementStatus }}</td>
+                    <td><a href="{{ path('order.detail', {id: order.id, slug: order.slug}) }}"
+                           class="btn btn-primary mt-4">Détail</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

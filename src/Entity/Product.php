@@ -8,6 +8,7 @@ use Cocur\Slugify\Slugify;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -22,12 +23,14 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("products:read")
      */
     private $id;
 
     /**
      * @var string|null
      * @ORM\Column (type="string", length=255)
+     * @Groups("products:read")
      */
 
     private $filename;
@@ -36,37 +39,44 @@ class Product
      * @var File|null
      * @Assert\Image(mimeTypes="image/jpeg")
      * @Vich\UploadableField(mapping="product_image", fileNameProperty="filename")
+     * @Groups("products:read")
      */
 
     private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("products:read")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("products:read")
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("products:read")
      */
     private $mark;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("products:read")
      */
     private $model;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups("products:read")
      */
     private $price;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("products:read")
      */
     private $updated_at;
 
@@ -142,7 +152,7 @@ class Product
 
     public function getFormattedPrice(): string
     {
-        return number_format($this->price, 0,'',' ');
+        return number_format($this->price, 0, '', ' ');
     }
 
     /**
