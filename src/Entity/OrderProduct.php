@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=OrderProductRepository::class)
+ * @ApiResource()
  */
 class OrderProduct
 {
@@ -18,7 +20,7 @@ class OrderProduct
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     private $id_order;
 
@@ -37,12 +39,12 @@ class OrderProduct
         return $this->id;
     }
 
-    public function getIdOrder(): ?string
+    public function getIdOrder(): ?int
     {
         return $this->id_order;
     }
 
-    public function setIdOrder(string $id_order): self
+    public function setIdOrder(int $id_order): self
     {
         $this->id_order = $id_order;
 
